@@ -27,6 +27,8 @@ Configuration store is resolved in this order:
 
 ## Usage
 
+| command | my best guess |
+| --- | --- |
 | `/websearch` | interactive config menu |
 | `/websearch status` | show current configuration |
 | `/websearch enable` | give pi websearch access |
