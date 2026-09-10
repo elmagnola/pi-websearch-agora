@@ -19,10 +19,24 @@ Copy the entire package into `~/.pi/agent/extensions/websearch-agora/`
 
 ## Configuration
 
-Configuration is resolved in this order (first match wins):
+run `/websearch` for a nice UI config interface!
 
+Configuration store is resolved in this order:
 1. Environment variables
 2. `~/.pi/agent/websearch.json`
+
+## Usage
+
+| `/websearch` | interactive config menu |
+| `/websearch status` | show current configuration |
+| `/websearch enable` | give pi websearch access |
+| `/websearch disable` | take away pi websearch access |
+| `/websearch provider` | change search provider |
+| `/websearch key tavily` | prompts for your tavily API key |
+| `/websearch results 2` | only fetch 2 results |
+| `/websearch baseurl ` | i dunno what this does. change search API URL i guess |
+| `/websearch test` | run a test search |
+
 
 Environment variables:
 
@@ -36,32 +50,6 @@ Environment variables:
 | `KAGI_API_KEY` | Kagi key |
 | `SERPER_API_KEY` | Serper key |
 | `TAVILY_API_KEY` | Tavily key |
-
-The config file has the same shape as Agora's persisted settings:
-
-```json
-{
-  "enabled": true,
-  "provider": "duckduckgo",
-  "apiKeys": { "brave": "..." },
-  "numResults": 5,
-  "baseUrl": ""
-}
-```
-
-## Usage
-
-```
-/websearch                 # interactive menu
-/websearch status          # show current configuration
-/websearch enable
-/websearch disable
-/websearch provider brave
-/websearch key tavily      # prompts for the key
-/websearch results         # prompts for 1-10
-/websearch baseurl https://searx.example.com
-/websearch test pi agent   # run a live search
-```
 
 ## Providers
 
