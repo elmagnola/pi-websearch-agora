@@ -168,6 +168,44 @@ export async function tavilySearch(
   return { ok: true, results, ...(answer ? { answer } : {}) };
 }
 
+export function normalizeFirecrawlSearchResponse(responseBody: string): SearchOutcome {
+  const json = safeJsonParse<RawResult>(responseBody);
+  const data = json?.["data"] as RawResult | undefined;
+  const web = asArray(data?.["web"]);
+
+  const results: SearchResult[] = [];
+  for (const obj of web) {
+    const url = str(obj["url"]);
+    if (!url) continue;
+    results.push({ title: str(obj["title"]), url, description: str(obj["description"]) });
+  }
+  if (results.length === 0) return { ok: false, error: "no_results" };
+  return { ok: true, results };
+}
+
+export async function firecrawlSearch(
+  query: string,
+  numResults: number,
+  apiKey: string,
+  signal?: AbortSignal,
+): Promise<SearchOutcome> {
+  const response = await httpJson(
+    "https://api.firecrawl.dev/v2/search",
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({ query, limit: numResults }),
+    },
+    { signal },
+  );
+  if (!response.ok) return { ok: false, error: response.error, message: response.message };
+  return normalizeFirecrawlSearchResponse(response.body);
+}
+
 export async function searxngSearch(
   query: string,
   numResults: number,

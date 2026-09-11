@@ -1,9 +1,11 @@
 # pi-websearch-agora
 
-A [Pi](https://pi.dev) agent extension that ports [Agora's](https://github.com/newo-ether/Agora/) excellent  `WebSearchToolProvider`
-(`app/src/main/java/com/newoether/agora/tool/WebSearchToolProvider.kt`).
+<img width="541" height="591" alt="image" src="https://github.com/user-attachments/assets/a12236a3-8730-420d-9f8c-e9eeff68a042" />
 
-Agora's search just works; most models return properly formatted results and I wanted that for my pi agent. No other extension worked as seamlessly as Agora's native search. Ported with Deepseek Flash v4.1
+A [Pi](https://pi.dev) agent extension that ports [Agora's](https://github.com/newo-ether/Agora/) excellent  `WebSearchToolProvider`
+(`app/src/main/java/com/newoether/agora/tool/WebSearchToolProvider.kt`). Agora's search just works; most models return properly formatted results and I wanted that for my pi agent. I tried other pi websearch extensions but they were either too bulky or intermittent. This one gives us targeted and restrained search APIs for consistent results, just like the android app from which it's ported.
+
+Supports DuckDuckGo (keyless), Firecrawl, Brave, Kagi, Serper, Tavily
 
 It registers two tools and one command:
 
@@ -25,7 +27,7 @@ Configuration store is resolved in this order:
 1. Environment variables
 2. `~/.pi/agent/websearch.json`
 
-## Usage
+## /websearch usage
 
 | command | my best guess |
 | --- | --- |
@@ -44,7 +46,7 @@ Environment variables:
 
 | Variable | Meaning |
 | --- | --- |
-| `WEB_SEARCH_PROVIDER` | `duckduckgo`, `brave`, `kagi`, `serper`, `tavily`, `searxng` |
+| `WEB_SEARCH_PROVIDER` | `duckduckgo`, `brave`, `kagi`, `serper`, `tavily`, `searxng`, `firecrawl` |
 | `WEB_SEARCH_ENABLED` | `0` / `false` to disable |
 | `WEB_SEARCH_NUM_RESULTS` | 1–10 (default 5) |
 | `WEB_SEARCH_BASE_URL` | SearXNG base URL (default `https://searx.be`) |
@@ -52,6 +54,7 @@ Environment variables:
 | `KAGI_API_KEY` | Kagi key |
 | `SERPER_API_KEY` | Serper key |
 | `TAVILY_API_KEY` | Tavily key |
+| `FIRECRAWL_API_KEY` | Firecrawl key |
 
 ## Providers
 
@@ -62,6 +65,7 @@ Environment variables:
 | Kagi | yes | `kagi.com/api/v1/search` |
 | Serper | yes | `google.serper.dev/search` |
 | Tavily | yes | `api.tavily.com/search`, includes an AI answer when available. |
+| Firecrawl | yes | `api.firecrawl.dev/v2/search`, plain web results (title/url/snippet). |
 | SearXNG | no (URL) | `<baseUrl>/search?q=…&format=json` |
 
 ## Port parity notes
@@ -85,3 +89,6 @@ Intentional differences:
 - **Configuration** is via env vars / `websearch.json` and the `/websearch` command
   instead of Agora's Compose settings screen.
 - Header casing and HTTP client differ (Node `fetch` vs OkHttp).
+
+## AI Disclosure
+- Fully generated with Deepseek Flash v4.1 by providing Agora source files, pi documentation, basic prompt

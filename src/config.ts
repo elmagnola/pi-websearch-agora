@@ -8,7 +8,8 @@ export type WebSearchProvider =
   | "kagi"
   | "serper"
   | "tavily"
-  | "searxng";
+  | "searxng"
+  | "firecrawl";
 
 export const WEB_SEARCH_PROVIDERS: readonly WebSearchProvider[] = [
   "duckduckgo",
@@ -17,6 +18,7 @@ export const WEB_SEARCH_PROVIDERS: readonly WebSearchProvider[] = [
   "serper",
   "tavily",
   "searxng",
+  "firecrawl",
 ];
 
 export interface WebSearchConfig {
@@ -34,6 +36,7 @@ export const PROVIDER_LABELS: Record<WebSearchProvider, string> = {
   serper: "Serper",
   tavily: "Tavily",
   searxng: "SearXNG",
+  firecrawl: "Firecrawl",
 };
 
 export const PROVIDER_DESCRIPTIONS: Record<WebSearchProvider, string> = {
@@ -43,6 +46,7 @@ export const PROVIDER_DESCRIPTIONS: Record<WebSearchProvider, string> = {
   serper: "Fast Google Search API. 2,500 free queries/month.",
   tavily: "AI-optimized search API. Built for LLM agents.",
   searxng: "Self-hosted metasearch engine. Provide your own instance URL.",
+  firecrawl: "Web data API for AI. Scrapes or searches and returns clean results.",
 };
 
 function resolveConfigPath(): string {
@@ -92,6 +96,7 @@ const ENV_KEYS: Record<WebSearchProvider, string | undefined> = {
   kagi: process.env.KAGI_API_KEY,
   serper: process.env.SERPER_API_KEY,
   tavily: process.env.TAVILY_API_KEY,
+  firecrawl: process.env.FIRECRAWL_API_KEY,
   duckduckgo: undefined,
   searxng: undefined,
 };

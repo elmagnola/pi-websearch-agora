@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { htmlToReadableText, decodeHtmlEntities, stripHtml } from "../src/html.ts";
-import { searxngSearchUrl, kagiSearchRequestBody, normalizeKagiSearchResponse } from "../src/providers/api.ts";
+import { searxngSearchUrl, kagiSearchRequestBody, normalizeKagiSearchResponse, normalizeFirecrawlSearchResponse } from "../src/providers/api.ts";
 import { parseDuckDuckGoResults } from "../src/providers/duckduckgo.ts";
 import { normalizeProvider, loadConfig } from "../src/config.ts";
 import { clampNumResults } from "../src/search.ts";
@@ -56,6 +56,36 @@ test("kagi normalization reports no_results on malformed data", () => {
     ok: false,
     error: "no_results",
   });
+});
+
+test("firecrawl normalization extracts url/title/description from data.web", () => {
+  const body = JSON.stringify({
+    success: true,
+    data: {
+      web: [
+        { url: "https://firecrawl.dev/", title: "Firecrawl", description: "The web data API.", position: 1 },
+        { url: "https://github.com/firecrawl/firecrawl", title: "GitHub repo", description: "Source code.", position: 2 },
+        { url: "", title: "skip-empty-url", description: "x" },
+      ],
+    },
+  });
+  const outcome = normalizeFirecrawlSearchResponse(body);
+  assert.equal(outcome.ok, true);
+  if (!outcome.ok) return;
+  assert.equal(outcome.results.length, 2);
+  assert.deepEqual(outcome.results[0], {
+    title: "Firecrawl",
+    url: "https://firecrawl.dev/",
+    description: "The web data API.",
+  });
+});
+
+test("firecrawl normalization reports no_results on empty or malformed data", () => {
+  assert.deepEqual(normalizeFirecrawlSearchResponse("{}"), { ok: false, error: "no_results" });
+  assert.deepEqual(
+    normalizeFirecrawlSearchResponse(JSON.stringify({ data: { web: [] } })),
+    { ok: false, error: "no_results" },
+  );
 });
 
 test("duckduckgo parser extracts results and decodes uddg redirects", () => {

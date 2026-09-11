@@ -4,6 +4,7 @@ import type { SearchOutcome } from "./http.ts";
 import { duckDuckGoSearch } from "./providers/duckduckgo.ts";
 import {
   braveSearch,
+  firecrawlSearch,
   kagiSearch,
   searxngSearch,
   serperSearch,
@@ -51,6 +52,8 @@ export async function runWebSearch(
         return await serperSearch(query, numResults, apiKey, signal);
       case "tavily":
         return await tavilySearch(query, numResults, apiKey, signal);
+      case "firecrawl":
+        return await firecrawlSearch(query, numResults, apiKey, signal);
       case "searxng":
         return await searxngSearch(query, numResults, apiKey, config.baseUrl, signal);
     }
